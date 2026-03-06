@@ -48,3 +48,6 @@ coverage
 .cache
 .parcel-cache
 .eslintcache
+
+# Documentation (local only)
+docs/
