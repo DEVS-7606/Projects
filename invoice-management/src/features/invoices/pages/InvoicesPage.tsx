@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DataTable from '@/shared/components/DataTable/DataTable';
 import FilterBar from '@/shared/components/FilterBar/FilterBar';
@@ -8,7 +8,7 @@ import '../styles/InvoicesPage.css';
 
 export default function InvoicesPage() {
   const navigate = useNavigate();
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [invoices] = useState<Invoice[]>([]);
   const [filters, setFilters] = useState<InvoiceFilters>({});
   const [loading, setLoading] = useState(true);
 

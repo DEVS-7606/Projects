@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import DataTable from '@/shared/components/DataTable/DataTable';
 import FilterBar from '@/shared/components/FilterBar/FilterBar';
 import type { Vendor } from '@/types';
 import '../styles/VendorsPage.css';
 
 export default function VendorsPage() {
-  const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [vendors] = useState<Vendor[]>([]);
   const [filteredVendors, setFilteredVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');

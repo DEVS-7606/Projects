@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import StatsCard from '@/shared/components/StatsCard/StatsCard';
 import DataTable from '@/shared/components/DataTable/DataTable';
 import StatusBadge from '@/shared/components/StatusBadge/StatusBadge';
@@ -6,14 +6,14 @@ import type { Invoice, DashboardStats } from '@/types';
 import '../styles/DashboardPage.css';
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState<DashboardStats>({
+  const [stats] = useState<DashboardStats>({
     total_invoices: 0,
     unpaid_amount: 0,
     overdue_amount: 0,
     paid_this_month: 0,
   });
 
-  const [recentInvoices, setRecentInvoices] = useState<Invoice[]>([]);
+  const [recentInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

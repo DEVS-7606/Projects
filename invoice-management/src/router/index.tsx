@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import AppShell from '@/shared/components/Layout/AppShell';
 import LoginPage from '@/features/auth/pages/LoginPage';

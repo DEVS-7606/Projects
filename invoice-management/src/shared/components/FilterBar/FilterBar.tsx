@@ -7,7 +7,7 @@ interface FilterBarProps {
   children?: React.ReactNode;
 }
 
-export default function FilterBar({ onSearch, children }: FilterBarProps) {
+export default function FilterBar({ children }: FilterBarProps) {
   return (
     <div className="filter-bar">
       <div className="filter-content">{children}</div>
