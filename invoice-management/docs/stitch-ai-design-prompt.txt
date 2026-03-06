@@ -1,0 +1,445 @@
+STITCH.AI UI DESIGN PROMPT
+Invoice Management System - Complete UI Design Request
+
+===========================================
+PROJECT OVERVIEW
+===========================================
+
+Design a modern, clean B2B SaaS web application for invoice management targeting micro-SMEs (small businesses in India). The app helps users manage supplier invoices by forwarding emails, auto-extracting data, and tracking payment status.
+
+DESIGN PHILOSOPHY:
+- Clean, professional B2B SaaS aesthetic
+- Table-first, data-dense design
+- Strong readability and clarity
+- Minimal colors, maximum functionality
+- Mobile-responsive (desktop-first)
+
+===========================================
+PAGES TO DESIGN
+===========================================
+
+1. LOGIN PAGE
+   - Clean, centered login form
+   - Email and password fields
+   - "Remember me" checkbox
+   - "Forgot password?" link
+   - "Sign up" link at bottom
+   - Simple illustration or logo on left side (optional)
+   - White background with subtle gradient
+
+2. SIGNUP PAGE
+   - Similar layout to login
+   - Fields: Business name, Email, Password, Confirm Password
+   - Terms & conditions checkbox
+   - "Already have an account? Login" link
+   - Clean, minimal design
+
+3. DASHBOARD PAGE
+   Layout:
+   - Left sidebar navigation (fixed)
+   - Top header with user profile dropdown
+   - Main content area with:
+     
+     A. Stats Cards Row (4 cards):
+        - Total Invoices (with count)
+        - Unpaid Amount (₹ amount in red/orange)
+        - Overdue Amount (₹ amount in red)
+        - Paid This Month (₹ amount in green)
+        Each card: Icon + Label + Large Number + Small trend indicator
+     
+     B. Onboarding Card (for new users):
+        - "Get Started" heading
+        - Show unique forwarding email with copy button
+        - 3-step visual guide:
+          1. Forward invoice email
+          2. Wait for processing
+          3. Review in dashboard
+     
+     C. Recent Invoices Table:
+        - "Recent Invoices" heading with "View all →" link
+        - Table columns: Invoice #, Vendor, Date, Due Date, Amount, Status
+        - Show 5 most recent invoices
+        - Status badges with colors (paid=green, unpaid=yellow, overdue=red)
+     
+     D. Quick Actions Section:
+        - 3 buttons: "+ Add Invoice", "+ Add Vendor", "📋 Copy Email"
+        - Horizontal layout
+
+4. INVOICES LIST PAGE
+   Layout:
+   - Same sidebar + header
+   - Page title "Invoices" with "+ Add Invoice" button (top right)
+   - Filter bar with:
+     - Search input (left)
+     - Status dropdown filter
+     - Source dropdown (Email/Manual)
+     - Date range picker
+   - Full data table:
+     Columns: Invoice #, Vendor, Invoice Date, Due Date, Amount, Status, Source, Actions
+     - Status badges with colors
+     - Source icons (📧 for email, ✏️ for manual)
+     - Row hover effect
+     - Click row to view details
+   - Pagination at bottom
+   - Empty state: "No invoices found. Forward an invoice email to get started."
+
+5. INVOICE DETAIL PAGE
+   Layout:
+   - Same sidebar + header
+   - Back button (← Back to Invoices)
+   - Page title: "Invoice #INV-001"
+   - Action buttons (top right): "Edit", "Mark as Paid", "Delete"
+   
+   Content in 2 columns:
+   
+   LEFT COLUMN (60%):
+   - PDF/File preview card
+   - If no file: placeholder with upload option
+   
+   RIGHT COLUMN (40%):
+   - Invoice Details Card:
+     * Vendor name (large)
+     * Status badge
+     * Invoice number
+     * Invoice date
+     * Due date
+     * Currency
+   
+   - Amount Breakdown Card:
+     * Subtotal
+     * CGST
+     * SGST
+     * IGST
+     * Tax Total
+     * Total Amount (large, bold)
+   
+   - Payment Info Card:
+     * Payment reference
+     * Paid date (if paid)
+     * Payment method
+   
+   - Metadata Card:
+     * Source (email/manual)
+     * Created date
+     * Last updated
+   
+   - Duplicate Warning (if applicable):
+     * Yellow alert box
+     * "Possible duplicate detected"
+     * Link to original invoice
+     * "Confirm Duplicate" or "Ignore" buttons
+
+6. VENDORS PAGE
+   Layout:
+   - Same sidebar + header
+   - Page title "Vendors" with "+ Add Vendor" button
+   - Filter bar:
+     - Search input
+     - Status filter (Active/Inactive)
+   - Data table:
+     Columns: Vendor Name, Email, Phone, GSTIN, Outstanding Amount, Status, Actions
+     - Status badges (Active=green, Inactive=gray)
+     - Click row to view vendor details
+   - Empty state: "No vendors found. Add your first vendor."
+
+7. VENDOR DETAIL/MODAL
+   - Modal or side drawer
+   - Vendor information form:
+     * Name
+     * GSTIN
+     * Email
+     * Phone
+     * Address (textarea)
+     * Default payment terms (days)
+     * Notes (textarea)
+     * Active/Inactive toggle
+   - Related invoices section:
+     * Count of invoices
+     * Outstanding amount
+     * List of recent invoices
+   - Save/Cancel buttons
+
+===========================================
+DESIGN SYSTEM SPECIFICATIONS
+===========================================
+
+COLOR PALETTE:
+Primary Colors:
+- Primary Blue: #3b82f6 (buttons, links, active states)
+- Dark Gray: #1f2937 (text, sidebar background)
+- Light Gray: #f9fafb (page background)
+- White: #ffffff (cards, tables)
+
+Status Colors:
+- Paid/Success: #10b981 (green)
+- Unpaid/Warning: #f59e0b (orange/yellow)
+- Overdue/Error: #ef4444 (red)
+- Needs Review: #8b5cf6 (purple)
+- Inactive: #6b7280 (gray)
+
+Borders & Dividers:
+- Border: #e5e7eb (light gray)
+- Hover: #f3f4f6 (very light gray)
+
+TYPOGRAPHY:
+- Font Family: Inter, system-ui, -apple-system, sans-serif
+- Headings: 
+  * H1: 32px, bold (page titles)
+  * H2: 24px, semibold (section titles)
+  * H3: 18px, semibold (card titles)
+- Body: 14px, regular
+- Small: 12px, regular (metadata, labels)
+- Button: 14px, medium
+
+SPACING:
+- Page padding: 32px
+- Card padding: 24px
+- Section gap: 24px
+- Element gap: 16px
+- Tight gap: 8px
+
+COMPONENTS:
+
+1. Sidebar (240px width):
+   - Dark background (#1f2937)
+   - Logo at top
+   - Navigation items with icons:
+     * 📊 Dashboard
+     * 📄 Invoices
+     * 🏢 Vendors
+     * ⚙️ Settings
+   - Active state: lighter background + blue accent
+   - User profile at bottom
+
+2. Stats Card:
+   - White background
+   - Border radius: 8px
+   - Border: 1px solid #e5e7eb
+   - Padding: 20px
+   - Icon (left, 40px circle with light background)
+   - Label (small, gray)
+   - Value (large, bold, dark)
+   - Trend indicator (small, with arrow)
+
+3. Data Table:
+   - White background
+   - Header: light gray background, bold text
+   - Rows: white with hover effect
+   - Borders: light gray
+   - Alternating row colors (optional)
+   - Sortable columns (arrow icons)
+   - Action buttons on hover
+
+4. Status Badge:
+   - Pill shape (border-radius: 12px)
+   - Padding: 4px 12px
+   - Small text (12px)
+   - Background colors based on status
+   - White or dark text for contrast
+
+5. Buttons:
+   Primary:
+   - Background: #3b82f6
+   - Text: white
+   - Padding: 10px 16px
+   - Border radius: 6px
+   - Hover: darker blue
+   
+   Secondary:
+   - Background: #e5e7eb
+   - Text: #1f2937
+   - Same padding/radius
+   
+   Danger:
+   - Background: #ef4444
+   - Text: white
+
+6. Form Fields:
+   - Border: 1px solid #e5e7eb
+   - Border radius: 6px
+   - Padding: 10px 12px
+   - Focus: blue border
+   - Label above field (small, gray)
+   - Error state: red border + red text below
+
+7. Filter Bar:
+   - White background
+   - Padding: 16px
+   - Border: 1px solid #e5e7eb
+   - Border radius: 8px
+   - Horizontal layout with gap
+   - Search input (flexible width)
+   - Dropdowns (fixed width)
+
+8. Empty State:
+   - Centered content
+   - Large icon (gray)
+   - Message text (gray)
+   - Call-to-action button
+
+===========================================
+LAYOUT SPECIFICATIONS
+===========================================
+
+SIDEBAR NAVIGATION:
+- Fixed position, left side
+- Width: 240px
+- Full height
+- Dark background
+- Logo at top (60px height)
+- Navigation items (48px height each)
+- User section at bottom
+
+MAIN CONTENT AREA:
+- Margin-left: 240px (sidebar width)
+- Padding: 32px
+- Max-width: 1400px
+- Background: #f9fafb
+
+RESPONSIVE BREAKPOINTS:
+- Desktop: 1024px+
+- Tablet: 768px - 1023px (sidebar collapses to icons)
+- Mobile: < 768px (sidebar becomes drawer)
+
+===========================================
+INTERACTION STATES
+===========================================
+
+Hover States:
+- Buttons: slightly darker background
+- Table rows: light gray background
+- Sidebar items: lighter background
+- Links: underline
+
+Active States:
+- Sidebar item: blue accent bar + lighter background
+- Selected table row: light blue background
+
+Loading States:
+- Skeleton loaders for tables
+- Spinner for buttons
+- Progress bar for file uploads
+
+Error States:
+- Red border on form fields
+- Red text for error messages
+- Alert boxes with red accent
+
+Success States:
+- Green checkmark icon
+- Toast notification (top-right)
+- Green border for success messages
+
+===========================================
+SPECIAL FEATURES
+===========================================
+
+1. Copy Email Button:
+   - Shows forwarding email
+   - Click to copy
+   - Success feedback (checkmark + "Copied!")
+
+2. Duplicate Warning:
+   - Yellow alert box
+   - Warning icon
+   - Clear message
+   - Action buttons
+
+3. PDF Preview:
+   - Embedded viewer or thumbnail
+   - Zoom controls
+   - Download button
+
+4. Date Picker:
+   - Calendar popup
+   - Range selection
+   - Quick filters (This month, Last month, etc.)
+
+5. Search:
+   - Instant search (no submit button)
+   - Clear button (X)
+   - Search icon
+
+===========================================
+ACCESSIBILITY REQUIREMENTS
+===========================================
+
+- High contrast text (WCAG AA minimum)
+- Focus indicators on all interactive elements
+- Keyboard navigation support
+- Screen reader friendly labels
+- Alt text for icons
+- Proper heading hierarchy
+
+===========================================
+DELIVERABLES REQUESTED
+===========================================
+
+Please provide:
+1. High-fidelity mockups for all 7 pages
+2. Desktop view (1440px width)
+3. Mobile view for key pages (375px width)
+4. Component library/design system
+5. Interactive prototype (if possible)
+6. Color palette and typography specifications
+7. Spacing and layout guidelines
+
+===========================================
+DESIGN INSPIRATION
+===========================================
+
+Style References:
+- Stripe Dashboard (clean, data-focused)
+- Linear (minimal, modern)
+- Notion (clean tables, good hierarchy)
+- Vercel Dashboard (simple, effective)
+
+Avoid:
+- Overly colorful designs
+- Complex illustrations
+- Heavy animations
+- Marketing-style visuals
+
+===========================================
+TECHNICAL NOTES
+===========================================
+
+- Design for React implementation
+- Component-based thinking
+- Reusable design patterns
+- Consider loading states
+- Plan for empty states
+- Think about error scenarios
+
+===========================================
+PRIORITY ORDER
+===========================================
+
+High Priority:
+1. Dashboard page
+2. Invoices list page
+3. Invoice detail page
+
+Medium Priority:
+4. Login/Signup pages
+5. Vendors page
+
+Low Priority:
+6. Settings page (not in V1 scope)
+7. Advanced features
+
+===========================================
+QUESTIONS TO CONSIDER
+===========================================
+
+1. Should the sidebar be collapsible?
+2. Do you want dark mode support?
+3. Should tables have inline editing?
+4. Do you want bulk actions for invoices?
+5. Should we show invoice thumbnails in the list?
+
+===========================================
+END OF PROMPT
+===========================================
+
+This is a V1 MVP design. Focus on clarity, usability, and speed over fancy visuals. The users are small business owners who need to get work done quickly.

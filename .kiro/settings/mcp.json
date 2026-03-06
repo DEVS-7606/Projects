@@ -15,6 +15,14 @@
       "autoApprove": [
         "list_projects"
       ]
+    },
+    "stitch": {
+      "url": "https://stitch.googleapis.com/mcp",
+      "type": "http",
+      "headers": {
+        "Accept": "application/json",
+        "X-Goog-Api-Key": "AQ.Ab8RN6JE3AAH1AXiZJHG3h6RrgvIKybJBAhHoTVQ7oo5LCYyYA"
+      }
     }
   }
 }

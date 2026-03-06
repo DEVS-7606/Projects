@@ -49,5 +49,6 @@ coverage
 .parcel-cache
 .eslintcache
 
-# Documentation (local only)
-# docs/
+#system files
+.kiro
+.vscode
