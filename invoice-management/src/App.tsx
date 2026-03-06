@@ -1,13 +1,10 @@
 import React from 'react';
-import LandingPage from '@/features/landing/components/LandingPage';
+import { RouterProvider } from 'react-router-dom';
+import { router } from '@/router';
 import './App.css';
 
 const App: React.FC = () => {
-  return (
-    <div className="app-root">
-      <LandingPage />
-    </div>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

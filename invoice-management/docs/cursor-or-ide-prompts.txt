@@ -1,0 +1,449 @@
+CURSOR / IDE PROMPTS
+PROJECT: Invoice Management MVP
+USE THESE PROMPTS IN NEW CHATS
+IMPORTANT: ALWAYS STAY WITHIN V1 SCOPE
+
+==================================================
+PROMPT 1 - PROJECT CONTEXT SETTER
+==================================================
+
+I am building a v1 invoice management MVP for micro-SMEs.
+
+Product goal:
+Users forward supplier invoice emails to a unique app email.
+The system stores the file, extracts invoice data, and shows invoices in one dashboard.
+Users can manage vendors, review invoice details, mark invoices as paid, and track unpaid/overdue invoices.
+
+Tech stack:
+- React frontend
+- Supabase auth/database/storage
+- Email ingestion webhook
+- OCR-based invoice parsing
+
+V1 scope only:
+- auth
+- profile
+- vendors
+- invoices
+- email forwarding
+- OCR extraction
+- review flow
+- mark as paid
+- duplicate flagging
+- dashboard stats
+
+Out of scope:
+- WhatsApp
+- billing/subscriptions
+- team accounts
+- invoice line items
+- payment gateway
+- GST filing
+- full accounting
+
+Please follow this context strictly in this chat.
+
+==================================================
+PROMPT 2 - FRONTEND APP SHELL
+==================================================
+
+Using the project context above, design the React frontend app shell for v1.
+
+Need:
+- route structure
+- app layout
+- sidebar or top nav
+- protected routes
+- page structure
+- reusable component breakdown
+- suggested folder structure
+
+Pages needed:
+- login
+- signup
+- dashboard
+- vendors
+- invoices
+- invoice detail/review
+- profile/settings
+
+Requirements:
+- clean B2B SaaS style
+- table-first UI
+- clear status badges
+- easy onboarding for forwarding email
+- scalable but simple component architecture
+
+Output format:
+1. route map
+2. component tree
+3. folder structure
+4. state/query strategy
+5. implementation notes
+
+==================================================
+PROMPT 3 - DASHBOARD UI
+==================================================
+
+Using the project context above, design the v1 dashboard page.
+
+Need:
+- top stats cards
+- recent invoices section
+- needs review section
+- forwarding email card
+- quick actions
+- empty states
+- loading states
+
+Stats needed:
+- total invoices
+- unpaid amount
+- overdue amount
+- paid this month
+
+Please provide:
+1. dashboard layout
+2. component list
+3. responsive behavior
+4. UX notes
+5. sample React component breakdown
+
+==================================================
+PROMPT 4 - VENDORS PAGE UI
+==================================================
+
+Using the project context above, design the Vendors page for React.
+
+Vendor fields:
+- name
+- gstin
+- email
+- phone
+- address
+- default_payment_terms_days
+- notes
+- aliases
+- is_active
+
+Need:
+- vendors table
+- add vendor form
+- edit vendor flow
+- search
+- active/inactive filter
+- detail modal or drawer
+- validation rules
+
+Please provide:
+1. page layout
+2. form fields and validation
+3. component structure
+4. example TypeScript types
+5. suggested UX patterns
+
+==================================================
+PROMPT 5 - INVOICES PAGE UI
+==================================================
+
+Using the project context above, design the Invoices page for React.
+
+Invoice fields:
+- vendor
+- invoice_number
+- invoice_date
+- due_date
+- currency
+- subtotal
+- tax_total
+- total_amount
+- cgst_amount
+- sgst_amount
+- igst_amount
+- status
+- paid_at
+- payment_reference
+- source
+- source_message_id
+- file_url
+- duplicate_status
+- duplicate_of_invoice_id
+
+Need:
+- invoices data table
+- filters
+- search
+- status badges
+- duplicate warning
+- actions menu
+- empty/loading/error states
+
+Please provide:
+1. page layout
+2. column recommendations
+3. filters
+4. actions
+5. React component structure
+
+==================================================
+PROMPT 6 - INVOICE REVIEW SCREEN
+==================================================
+
+Using the project context above, design the invoice detail/review screen.
+
+Need:
+- PDF preview area
+- editable form for extracted fields
+- extracted metadata
+- duplicate warning area
+- mark as paid action
+- mark as unpaid action
+- save changes flow
+- review-first UX for OCR corrections
+
+Please provide:
+1. page sections
+2. form layout
+3. component breakdown
+4. validation and edge cases
+5. suggested interaction flow
+
+==================================================
+PROMPT 7 - SUPABASE SCHEMA
+==================================================
+
+Using the project context above, create SQL migrations for:
+- public.profiles
+- public.vendors
+- public.invoices
+
+Requirements:
+- profiles linked to auth.users
+- vendors.user_id references profiles.id
+- invoices.user_id references profiles.id
+- invoices.vendor_id references vendors.id
+- invoices.duplicate_of_invoice_id self-references invoices.id
+- RLS enabled
+- policies scoped to auth.uid()
+- indexes included
+- created_at and updated_at included
+- updated_at trigger included
+
+Do not add:
+- invoice_lines
+- teams
+- payments
+- subscriptions
+
+Output format:
+1. SQL migration
+2. short explanation
+3. verification queries
+
+==================================================
+PROMPT 8 - SUPABASE RLS REVIEW
+==================================================
+
+I already have Supabase tables for profiles, vendors, and invoices.
+
+Please review my RLS setup for security and correctness.
+
+Requirements:
+- users can only read their own profile
+- users can only access their own vendors
+- users can only access their own invoices
+- inserts/updates/deletes must be scoped to auth.uid()
+
+Please:
+1. review my SQL
+2. point out mistakes
+3. suggest safer policies
+4. provide corrected SQL if needed
+
+I will paste my current schema below.
+
+==================================================
+PROMPT 9 - EMAIL INGESTION BACKEND
+==================================================
+
+Using the project context above, design the backend flow for inbound email invoice ingestion.
+
+Goal:
+User forwards invoice email to:
+invoices+username@myapp.com
+
+System should:
+- parse recipient
+- identify user profile
+- read attachment
+- upload file to storage
+- run OCR
+- create or match vendor
+- create invoice
+- flag duplicates
+- set needs_review if confidence is low
+
+Please provide:
+1. backend flow
+2. endpoint design
+3. data pipeline steps
+4. edge cases
+5. pseudo code or TypeScript code structure
+
+==================================================
+PROMPT 10 - OCR PARSING FLOW
+==================================================
+
+Using the project context above, design the OCR parsing module for invoices.
+
+Need to extract:
+- vendor name
+- invoice number
+- invoice date
+- due date
+- subtotal
+- tax_total
+- total_amount
+- tax breakdown if available
+
+Requirements:
+- save raw OCR text
+- save extracted fields JSON
+- return confidence-aware output
+- support review flow when extraction is uncertain
+
+Please provide:
+1. parsing architecture
+2. extraction strategy
+3. confidence handling
+4. suggested TypeScript interface
+5. pseudo code
+
+==================================================
+PROMPT 11 - DUPLICATE DETECTION LOGIC
+==================================================
+
+Using the project context above, design duplicate invoice detection for v1.
+
+Business rules:
+- do not block insertion
+- mark suspected duplicates
+- set duplicate_status
+- set duplicate_of_invoice_id
+- allow user review
+
+Check duplicates by:
+1. same user + same vendor + same invoice number
+2. same user + same vendor + same total amount + same invoice date
+3. same user + same invoice number + same total amount
+
+Please provide:
+1. logic flow
+2. SQL or service-layer approach
+3. edge cases
+4. data model implications
+5. pseudo code
+
+==================================================
+PROMPT 12 - DASHBOARD STATS QUERY
+==================================================
+
+Using the project context above, write the data queries needed for v1 dashboard stats.
+
+Need:
+- total invoices
+- unpaid amount
+- overdue amount
+- paid this month
+- recent invoices
+- invoices needing review
+
+Please provide:
+1. SQL queries or Supabase query examples
+2. assumptions
+3. TypeScript helper functions
+4. performance notes
+
+==================================================
+PROMPT 13 - REACT TYPES AND API LAYER
+==================================================
+
+Using the project context above, generate TypeScript types and a frontend API/data layer for:
+- Profile
+- Vendor
+- Invoice
+- DashboardStats
+
+Need:
+- clean type definitions
+- form types
+- mapper helpers
+- Supabase query helper suggestions
+- scalable file structure
+
+Please provide:
+1. types
+2. DTOs if needed
+3. helper functions
+4. suggested folder structure
+
+==================================================
+PROMPT 14 - BUG FIX / REFACTOR PROMPT
+==================================================
+
+Use the project context above.
+
+I will paste code below.
+Please:
+- identify the root issue
+- explain the bug clearly
+- fix it with minimal changes
+- preserve current architecture
+- avoid unnecessary rewrites
+- mention any follow-up cleanup opportunities
+
+Output format:
+1. issue summary
+2. why it happens
+3. code fix
+4. optional cleanup suggestions
+
+==================================================
+PROMPT 15 - FEATURE REVIEW PROMPT
+==================================================
+
+Use the project context above.
+
+I have implemented a feature.
+Please review it as a senior engineer.
+
+Review for:
+- correctness
+- security
+- UX clarity
+- code quality
+- maintainability
+- v1 scope discipline
+
+Output format:
+1. what is good
+2. what is risky
+3. what should change now
+4. what can wait until later
+
+==================================================
+PROMPT 16 - STRICT V1 SCOPE GUARD
+==================================================
+
+Before suggesting anything, follow these rules:
+- Stay within v1 only
+- No WhatsApp features
+- No teams
+- No subscriptions
+- No invoice lines
+- No payment gateway integration
+- No big architecture overengineering
+- Prefer simple and shippable solutions
+- Optimize for a solo developer with a 9-to-5 job
+
+If you suggest anything outside v1, explicitly label it as "future scope" and keep it separate.
