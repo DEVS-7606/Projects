@@ -23,6 +23,18 @@
         "Accept": "application/json",
         "X-Goog-Api-Key": "AQ.Ab8RN6JE3AAH1AXiZJHG3h6RrgvIKybJBAhHoTVQ7oo5LCYyYA"
       }
+    },
+        "figma": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "figma-developer-mcp",
+        "--figma-api-key=figd_UzEfnpl__NFwy8wLVYef7ppNhCckZXEUZK7iM8tb",
+        "--stdio"
+      ],
+      "disabled": false,
+      "autoApprove": ["get_figma_data", "download_figma_images"]
     }
+
   }
 }
