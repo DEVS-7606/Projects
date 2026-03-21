@@ -1,175 +1,78 @@
 # Invoice Management System
 
-A focused invoice workflow tool for micro-SMEs. Forward invoice emails, auto-extract data, and track unpaid/overdue invoices in one dashboard.
+A focused invoice workflow tool for micro-SMEs. Track unpaid/overdue invoices, manage vendors, and automate invoice data extraction.
 
-## 🎯 What This Is
+## Tech Stack
 
-- Email-to-invoice automation
-- Invoice tracking dashboard
-- Vendor management
-- Status tracking (unpaid, paid, overdue)
+- Frontend: React 19 + TypeScript + Vite
+- Backend: Node.js + Express + TypeScript
+- Database: Supabase (PostgreSQL + Auth + RLS)
+- Routing: React Router v7
 
-## 🚫 What This Is NOT
+## Quick Start
 
-- Full accounting software
-- ERP system
-- GST filing tool
-- Team collaboration platform
-
-## 🚀 Quick Start
-
-### 1. Install & Setup (5 minutes)
 ```bash
 npm install
 cp .env.example .env
 # Add your Supabase credentials to .env
-```
-
-### 2. Database Setup (10 minutes)
-See `docs/backend-supabase-brief.txt` for SQL schema.
-
-### 3. Run
-```bash
 npm run dev
 ```
 
 Visit http://localhost:5173
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
-├── shared/components/     # Reusable UI (Atomic Design)
-│   ├── atoms/            # Buttons, inputs, badges
-│   ├── molecules/        # Cards, form fields
-│   ├── organisms/        # Tables, forms
-│   └── templates/        # Page layouts
-├── features/             # Feature modules
-│   ├── auth/            # Login, signup
-│   ├── dashboard/       # Dashboard page
-│   ├── invoices/        # Invoice management
-│   └── vendors/         # Vendor management
-├── hooks/               # Custom React hooks
-├── services/            # API/Supabase
-├── utils/               # Utilities
-├── types/               # TypeScript types
-└── constants/           # App constants
+├── features/          # Feature modules (auth, dashboard, invoices, vendors)
+├── shared/components/ # Atomic Design components (atoms → molecules → organisms → templates)
+├── hooks/             # Custom React hooks
+├── services/          # API/Supabase calls
+├── utils/             # Utilities
+└── types/             # TypeScript types
+
+packages/
+├── backend/           # Express API server
+└── shared/            # Shared types between frontend and backend
 ```
 
-## 🎨 Coding Standards
+## Environment Variables
 
-### Always Use Absolute Imports
-```typescript
-// ✅ Good
-import { Button } from '@/shared/components/atoms/Button';
-import { useAuth } from '@/hooks/useAuth';
-import type { Invoice } from '@/types';
+```bash
+# Frontend
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key
+VITE_API_BASE_URL=/api
 
-// ❌ Bad
-import { Button } from '../../../shared/components/Button';
+# Backend (packages/backend/.env)
+PORT=3002
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+JWT_SECRET=your_jwt_secret
+FRONTEND_URL=http://localhost:5173
 ```
 
-### Follow Atomic Design
-```
-Atoms → Molecules → Organisms → Templates → Pages
-```
+## Database
 
-### Single Responsibility Principle
-Each component/function does ONE thing.
+Tables: `profiles`, `vendors`, `invoices` — all with Row Level Security enabled.
 
-### Keep It Clean
-- Meaningful names
-- Small functions (<20 lines)
-- No magic numbers
-- Proper error handling
+Schema SQL is in `docs/backend-supabase-brief.txt`. Run it in the Supabase SQL Editor to set up your database.
 
-## 📚 Key Documents
+Demo login: **demobuilders@gmail.com**
 
-- **docs/project-plan.txt** - Product vision & scope
-- **docs/backend-supabase-brief.txt** - Database schema
-- **docs/frontend-ui-brief.txt** - UI requirements
-- **CODING_STANDARDS.md** - Detailed coding standards
+## Useful Commands
 
-## 🛠️ Tech Stack
-
-- **Frontend**: React 19 + TypeScript + Vite
-- **Backend**: Supabase (Auth, Database, Storage)
-- **Routing**: React Router v7
-- **Forms**: React Hook Form
-- **Dates**: date-fns
-
-## 📋 Development Workflow
-
-### Creating Components
-```typescript
-// src/shared/components/atoms/Button/Button.tsx
-import React from 'react';
-import './Button.css';
-
-interface ButtonProps {
-  label: string;
-  onClick: () => void;
-}
-
-export function Button({ label, onClick }: ButtonProps) {
-  return <button onClick={onClick}>{label}</button>;
-}
+```bash
+npm run dev              # Start frontend dev server
+npm run build            # Build frontend
+npm run build:backend    # Build backend
+npm run lint             # Lint
+npm run typecheck:all    # Type check everything
 ```
 
-### Import Order
-1. External dependencies
-2. Types
-3. Hooks
-4. Components
-5. Utils
-6. Constants
-7. Styles (last)
+## V1 Scope
 
-## ✅ Pre-Commit Checklist
+In scope: invoice CRUD, vendor management, status tracking, duplicate detection, email forwarding, OCR extraction.
 
-- [ ] Absolute imports (`@/`)
-- [ ] TypeScript types defined
-- [ ] No console.logs
-- [ ] Error handling
-- [ ] Loading states
-
-## 🐛 Common Issues
-
-**Import errors**: Restart dev server
-**Supabase errors**: Check `.env` file
-**Build errors**: Run `npm run lint`
-
-## 📞 Need Help?
-
-1. Check `docs/` folder for detailed specs
-2. Review `CODING_STANDARDS.md` for best practices
-3. Look at existing components for examples
-
-## 🎯 V1 Scope
-
-**In Scope:**
-- ✅ Email forwarding
-- ✅ OCR extraction
-- ✅ Invoice CRUD
-- ✅ Vendor management
-- ✅ Status tracking
-- ✅ Duplicate detection
-
-**Out of Scope:**
-- ❌ WhatsApp integration
-- ❌ Payment gateway
-- ❌ Team accounts
-- ❌ Billing/subscriptions
-- ❌ GST filing
-
-## 📈 Success Metrics
-
-V1 is successful when:
-- User can forward invoice email
-- Invoice appears in dashboard
-- User can edit and mark as paid
-- 5-10 beta users can use it independently
-
----
-
-**Built with ❤️ for micro-SMEs**
+Out of scope: payment gateway, team accounts, GST filing, WhatsApp integration.

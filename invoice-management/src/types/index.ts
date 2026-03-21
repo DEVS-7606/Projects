@@ -1,4 +1,4 @@
-// Auth
+// ─── Auth ────────────────────────────────────────────────────────
 export interface User {
   id: string;
   username: string;
@@ -7,62 +7,152 @@ export interface User {
   forwarding_email: string;
 }
 
-// Vendor
+export interface AuthResponse {
+  user: User;
+  token: string;
+}
+
+export interface SessionResponse {
+  user: User | null;
+  authenticated: boolean;
+}
+
+// ─── Vendor ──────────────────────────────────────────────────────
 export interface Vendor {
   id: string;
+  user_id: string;
+  name: string;
+  gstin: string | null;
+  email: string | null;
+  phone: string | null;
+  address: string | null;
+  aliases: string[] | null;
+  default_payment_terms_days: number | null;
+  notes: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateVendorRequest {
   name: string;
   gstin?: string;
   email?: string;
   phone?: string;
   address?: string;
+  aliases?: string[];
   default_payment_terms_days?: number;
   notes?: string;
-  aliases?: string[];
-  is_active: boolean;
+  is_active?: boolean;
 }
 
-// Invoice
+export interface UpdateVendorRequest {
+  name?: string;
+  gstin?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  aliases?: string[];
+  default_payment_terms_days?: number;
+  notes?: string;
+  is_active?: boolean;
+}
+
+// ─── Invoice ─────────────────────────────────────────────────────
+export type InvoiceStatus = "unpaid" | "paid" | "overdue" | "needs_review";
+export type InvoiceSource = "email" | "manual" | "api";
+
 export interface Invoice {
   id: string;
-  vendor_id: string;
+  user_id: string;
+  vendor_id: string | null;
   invoice_number: string;
-  invoice_date: string;
-  due_date: string;
+  invoice_date: string | null;
+  due_date: string | null;
   currency: string;
-  subtotal: number;
-  tax_total: number;
+  subtotal: number | null;
+  tax_total: number | null;
   total_amount: number;
-  cgst_amount?: number;
-  sgst_amount?: number;
-  igst_amount?: number;
-  status: 'unpaid' | 'paid' | 'overdue' | 'needs_review';
-  paid_at?: string;
-  payment_reference?: string;
-  source: 'email' | 'manual' | 'api';
-  source_message_id?: string;
-  file_url?: string;
-  raw_ocr_text?: string;
-  extracted_fields?: Record<string, any>;
-  duplicate_status?: 'suspected' | 'confirmed' | 'ignored' | null;
-  duplicate_of_invoice_id?: string;
+  cgst_amount: number | null;
+  sgst_amount: number | null;
+  igst_amount: number | null;
+  status: InvoiceStatus;
+  paid_at: string | null;
+  payment_reference: string | null;
+  source: InvoiceSource;
+  source_message_id: string | null;
+  file_url: string | null;
+  raw_ocr_text: string | null;
+  extracted_fields: Record<string, unknown>;
+  duplicate_status: string;
+  duplicate_of_invoice_id: string | null;
   created_at: string;
   updated_at: string;
 }
 
-// Dashboard Stats
+export interface InvoiceWithVendor extends Invoice {
+  vendor: Vendor | null;
+}
+
+export interface CreateInvoiceRequest {
+  invoice_number: string;
+  vendor_id?: string;
+  invoice_date?: string;
+  due_date?: string;
+  currency?: string;
+  subtotal?: number;
+  tax_total?: number;
+  total_amount: number;
+  cgst_amount?: number;
+  sgst_amount?: number;
+  igst_amount?: number;
+  status?: InvoiceStatus;
+  source?: InvoiceSource;
+}
+
+export interface UpdateInvoiceRequest {
+  invoice_number?: string;
+  vendor_id?: string;
+  invoice_date?: string;
+  due_date?: string;
+  currency?: string;
+  subtotal?: number;
+  tax_total?: number;
+  total_amount?: number;
+  cgst_amount?: number;
+  sgst_amount?: number;
+  igst_amount?: number;
+  status?: InvoiceStatus;
+  paid_at?: string;
+  payment_reference?: string;
+}
+
+export interface InvoiceFilters {
+  search?: string;
+  status?: InvoiceStatus;
+  source?: InvoiceSource;
+  vendor_id?: string;
+  date_from?: string;
+  date_to?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedInvoices {
+  invoices: InvoiceWithVendor[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+// ─── Dashboard ───────────────────────────────────────────────────
 export interface DashboardStats {
   total_invoices: number;
   unpaid_amount: number;
   overdue_amount: number;
   paid_this_month: number;
-}
-
-// Filter options
-export interface InvoiceFilters {
-  search?: string;
-  status?: Invoice['status'];
-  source?: Invoice['source'];
-  vendor_id?: string;
-  date_from?: string;
-  date_to?: string;
+  unpaid_count: number;
+  overdue_count: number;
+  paid_count: number;
 }
