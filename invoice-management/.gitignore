@@ -52,3 +52,4 @@ coverage
 #system files
 .kiro
 .vscode
+mcp.json
