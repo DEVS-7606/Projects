@@ -1,24 +1,31 @@
-import { useState, useMemo } from "react";
-import {
-  Building2,
-  Plus,
-  Mail,
-  Phone,
-  MapPin,
-  Edit,
-  Trash2,
-} from "lucide-react";
-import { Spinner } from "@/shared/components/atoms/Spinner";
-import { Button } from "@/shared/components/atoms/Button";
-import { Card } from "@/shared/components/atoms/Card";
-import { Badge } from "@/shared/components/atoms/Badge";
-import { EmptyState } from "@/shared/components/atoms/EmptyState";
-import { SearchInput } from "@/shared/components/molecules/SearchInput";
-import { PageHeader } from "@/shared/components/molecules/PageHeader";
 import { VendorModal } from "@/features/vendors/components/VendorModal";
 import { useVendors } from "@/hooks/useVendors";
 import { vendorApi } from "@/services/vendor.api";
-import type { Vendor, CreateVendorRequest, UpdateVendorRequest } from "@/types";
+import { Badge } from "@/shared/components/atoms/Badge";
+import { Button } from "@/shared/components/atoms/Button";
+import { Card } from "@/shared/components/atoms/Card";
+import { EmptyState } from "@/shared/components/atoms/EmptyState";
+import { Spinner } from "@/shared/components/atoms/Spinner";
+import { PageHeader } from "@/shared/components/molecules/PageHeader";
+import { SearchInput } from "@/shared/components/molecules/SearchInput";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/shared/components/ui/select";
+import type { CreateVendorRequest, UpdateVendorRequest, Vendor } from "@/types";
+import {
+  Building2,
+  Edit,
+  Mail,
+  MapPin,
+  Phone,
+  Plus,
+  Trash2,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
 export default function VendorsPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -134,17 +141,21 @@ export default function VendorsPage() {
             />
           </div>
           <div className="w-full md:w-48">
-            <select
+            <Select
               value={statusFilter}
-              onChange={(e) =>
-                setStatusFilter(e.target.value as "all" | "active" | "inactive")
+              onValueChange={(val) =>
+                setStatusFilter(val as "all" | "active" | "inactive")
               }
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#3b82f6] focus:ring-1 focus:ring-[#3b82f6]"
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="All Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </Card>

@@ -1,5 +1,5 @@
-import type { Request, Response, NextFunction } from "express";
-import { ZodSchema, ZodError } from "zod";
+import type { NextFunction, Request, Response } from "express";
+import { ZodSchema } from "zod";
 
 type ValidateTarget = "body" | "query";
 
@@ -21,7 +21,11 @@ export function validate(schema: ZodSchema, target: ValidateTarget = "body") {
     }
 
     // Replace with coerced/parsed values (e.g. string -> number for query params)
-    req[target] = result.data;
+    if (target === "query") {
+      Object.assign(req.query, result.data);
+    } else {
+      req[target] = result.data;
+    }
     next();
   };
 }

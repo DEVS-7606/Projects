@@ -1,5 +1,5 @@
-import { supabase } from "../config/supabase.js";
 import type { InvoiceFilters } from "@invoice-management/shared";
+import { supabase } from "../config/supabase.js";
 
 export class InvoiceRepository {
   async findAll(userId: string, filters: InvoiceFilters) {
@@ -16,9 +16,23 @@ export class InvoiceRepository {
     if (filters.source) query = query.eq("source", filters.source);
     if (filters.vendor_id) query = query.eq("vendor_id", filters.vendor_id);
     if (filters.search) {
-      query = query.or(
-        `invoice_number.ilike.%${filters.search}%,vendor.name.ilike.%${filters.search}%`,
-      );
+      // PostgREST doesn't support filtering on embedded relations in .or(),
+      // so we resolve matching vendor IDs first, then combine with invoice_number search.
+      const { data: matchingVendors } = await supabase
+        .from("vendors")
+        .select("id")
+        .eq("user_id", userId)
+        .ilike("name", `%${filters.search}%`);
+
+      const vendorIds = (matchingVendors || []).map((v) => v.id);
+
+      if (vendorIds.length > 0) {
+        query = query.or(
+          `invoice_number.ilike.%${filters.search}%,vendor_id.in.(${vendorIds.join(",")})`,
+        );
+      } else {
+        query = query.ilike("invoice_number", `%${filters.search}%`);
+      }
     }
     if (filters.date_from) query = query.gte("invoice_date", filters.date_from);
     if (filters.date_to) query = query.lte("invoice_date", filters.date_to);

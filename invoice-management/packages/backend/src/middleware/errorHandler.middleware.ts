@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { AppError } from "../errors/AppError.js";
 
 export function errorHandler(
@@ -15,10 +15,14 @@ export function errorHandler(
     return;
   }
 
-  // Unexpected errors — don't leak internals
+  // Unexpected errors — don't leak internals in production
   console.error("[Unhandled Error]", err);
+  const isDev = process.env.NODE_ENV !== "production";
   res.status(500).json({
     error: "INTERNAL_SERVER_ERROR",
-    message: "An unexpected error occurred",
+    message:
+      isDev && err instanceof Error
+        ? err.message
+        : "An unexpected error occurred",
   });
 }

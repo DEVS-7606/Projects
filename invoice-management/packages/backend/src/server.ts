@@ -1,9 +1,9 @@
-import express from "express";
 import cors from "cors";
+import express from "express";
 import helmet from "helmet";
 import { env, validateEnv } from "./config/env.js";
-import routes from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.middleware.js";
+import routes from "./routes/index.js";
 
 validateEnv();
 
