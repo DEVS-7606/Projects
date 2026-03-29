@@ -1,28 +1,31 @@
 /**
  * Simple Database Seeding Script
  * This version uses the service role key to bypass RLS
- * 
- * Usage: 
+ *
+ * Usage:
  * 1. Get your user ID from Supabase Dashboard > Authentication > Users
  * 2. Run: USER_ID=your-user-id npm run seed:simple
  */
 
-import { createClient } from '@supabase/supabase-js';
-import { mockVendors, mockInvoices } from '../src/utils/mockData.js';
-import * as dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { createClient } from "@supabase/supabase-js";
+import * as dotenv from "dotenv";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
+import { mockInvoices, mockVendors } from "../src/utils/mockData.js";
 
 // Load .env file
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-dotenv.config({ path: join(__dirname, '../.env') });
+dotenv.config({ path: join(__dirname, "../.env") });
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL;
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('❌ Missing Supabase credentials in .env file');
+  console.error("❌ Missing Supabase credentials in .env file");
+  console.error(
+    "Make sure your .env file has SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY",
+  );
   process.exit(1);
 }
 
@@ -30,25 +33,27 @@ if (!supabaseUrl || !supabaseKey) {
 const userId = process.env.USER_ID;
 
 if (!userId) {
-  console.error('❌ USER_ID not provided');
-  console.error('\n📝 How to get your USER_ID:');
-  console.error('   1. Go to: https://supabase.com/dashboard/project/xaccdvaayyfjfpeqehjr/auth/users');
-  console.error('   2. Find your user and copy the ID');
-  console.error('   3. Run: USER_ID=your-user-id npm run seed:simple');
-  console.error('\n💡 Or create a user first by signing up in the app');
+  console.error("❌ USER_ID not provided");
+  console.error("\n📝 How to get your USER_ID:");
+  console.error(
+    "   1. Go to: https://supabase.com/dashboard/project/xaccdvaayyfjfpeqehjr/auth/users",
+  );
+  console.error("   2. Find your user and copy the ID");
+  console.error("   3. Run: USER_ID=your-user-id npm run seed:simple");
+  console.error("\n💡 Or create a user first by signing up in the app");
   process.exit(1);
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function seedDatabase() {
-  console.log('🌱 Starting database seeding...\n');
+  console.log("🌱 Starting database seeding...\n");
   console.log(`👤 Using User ID: ${userId}\n`);
 
   try {
     // 1. Seed Vendors
-    console.log('📦 Seeding vendors...');
-    const vendorsToInsert = mockVendors.map(vendor => ({
+    console.log("📦 Seeding vendors...");
+    const vendorsToInsert = mockVendors.map((vendor) => ({
       user_id: userId,
       name: vendor.name,
       email: vendor.email,
@@ -57,16 +62,16 @@ async function seedDatabase() {
       address: `${vendor.address}, ${vendor.city}, ${vendor.state} ${vendor.pincode}`,
       default_payment_terms_days: vendor.paymentTerms,
       notes: vendor.notes,
-      is_active: vendor.status === 'active',
+      is_active: vendor.status === "active",
     }));
 
     const { data: insertedVendors, error: vendorsError } = await supabase
-      .from('vendors')
+      .from("vendors")
       .insert(vendorsToInsert)
       .select();
 
     if (vendorsError) {
-      console.error('❌ Error seeding vendors:', vendorsError.message);
+      console.error("❌ Error seeding vendors:", vendorsError.message);
       throw vendorsError;
     }
 
@@ -79,8 +84,8 @@ async function seedDatabase() {
     });
 
     // 2. Seed Invoices
-    console.log('📄 Seeding invoices...');
-    const invoicesToInsert = mockInvoices.map(invoice => ({
+    console.log("📄 Seeding invoices...");
+    const invoicesToInsert = mockInvoices.map((invoice) => ({
       user_id: userId,
       vendor_id: vendorIdMap.get(invoice.vendorId),
       invoice_number: invoice.invoiceNumber,
@@ -100,26 +105,27 @@ async function seedDatabase() {
     }));
 
     const { data: insertedInvoices, error: invoicesError } = await supabase
-      .from('invoices')
+      .from("invoices")
       .insert(invoicesToInsert)
       .select();
 
     if (invoicesError) {
-      console.error('❌ Error seeding invoices:', invoicesError.message);
+      console.error("❌ Error seeding invoices:", invoicesError.message);
       throw invoicesError;
     }
 
     console.log(`✅ Inserted ${insertedInvoices.length} invoices\n`);
 
-    console.log('🎉 Database seeding completed successfully!');
-    console.log('\n📊 Summary:');
+    console.log("🎉 Database seeding completed successfully!");
+    console.log("\n📊 Summary:");
     console.log(`   - Vendors: ${insertedVendors.length}`);
     console.log(`   - Invoices: ${insertedInvoices.length}`);
-    console.log('\n✨ You can now use the app with real data from Supabase!');
-    console.log(`\n🔗 View your data: https://supabase.com/dashboard/project/xaccdvaayyfjfpeqehjr/editor`);
-
+    console.log("\n✨ You can now use the app with real data from Supabase!");
+    console.log(
+      `\n🔗 View your data: https://supabase.com/dashboard/project/xaccdvaayyfjfpeqehjr/editor`,
+    );
   } catch (error) {
-    console.error('\n❌ Seeding failed:', error);
+    console.error("\n❌ Seeding failed:", error);
     process.exit(1);
   }
 }

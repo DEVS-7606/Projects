@@ -1,6 +1,29 @@
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:3002/api";
 
+export class ApiError extends Error {
+  readonly status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+
+  get isUnauthorized() {
+    return this.status === 401;
+  }
+  get isNotFound() {
+    return this.status === 404;
+  }
+  get isValidationError() {
+    return this.status === 422;
+  }
+  get isServerError() {
+    return this.status >= 500;
+  }
+}
+
 class ApiClient {
   private baseUrl: string;
 
@@ -43,7 +66,8 @@ class ApiClient {
       const errorBody = await response
         .json()
         .catch(() => ({ message: response.statusText }));
-      throw new Error(
+      throw new ApiError(
+        response.status,
         errorBody.message || `Request failed with status ${response.status}`,
       );
     }
