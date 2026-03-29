@@ -1,14 +1,15 @@
-import { useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
-import { Modal } from "@/shared/components/atoms/Modal";
-import { Button } from "@/shared/components/atoms/Button";
 import { useVendors } from "@/hooks/useVendors";
 import { invoiceApi } from "@/services/invoice.api";
-import type { CreateInvoiceRequest } from "@/types";
+import { Button } from "@/shared/components/atoms/Button";
+import { Modal } from "@/shared/components/atoms/Modal";
+import type { CreateInvoiceRequest, InvoiceWithVendor } from "@/types";
+import { Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 interface AddInvoiceModalProps {
   onClose: () => void;
   onSave: () => void;
+  invoice?: InvoiceWithVendor; // when provided, modal is in edit mode
 }
 
 interface InvoiceItem {
@@ -19,22 +20,37 @@ interface InvoiceItem {
   amount: number;
 }
 
-export function AddInvoiceModal({ onClose, onSave }: AddInvoiceModalProps) {
+export function AddInvoiceModal({
+  onClose,
+  onSave,
+  invoice,
+}: AddInvoiceModalProps) {
   const { vendors } = useVendors();
+  const isEdit = !!invoice;
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    invoiceNumber: "",
-    vendorId: "",
-    invoiceDate: new Date().toISOString().split("T")[0],
-    dueDate: "",
-    currency: "INR",
-    taxType: "cgst_sgst",
-    notes: "",
+    invoiceNumber: invoice?.invoice_number ?? "",
+    vendorId: invoice?.vendor_id ?? "",
+    invoiceDate:
+      invoice?.invoice_date ?? new Date().toISOString().split("T")[0],
+    dueDate: invoice?.due_date ?? "",
+    currency: invoice?.currency ?? "INR",
+    taxType: (invoice?.igst_amount ?? 0) > 0 ? "igst" : "cgst_sgst",
+    notes: invoice?.notes ?? "",
   });
 
-  const [items, setItems] = useState<InvoiceItem[]>([
-    { id: "1", description: "", quantity: 1, unitPrice: 0, amount: 0 },
-  ]);
+  const [items, setItems] = useState<InvoiceItem[]>(() => {
+    if (invoice?.items && invoice.items.length > 0) {
+      return invoice.items.map((item) => ({
+        id: item.id,
+        description: item.description,
+        quantity: item.quantity,
+        unitPrice: item.unit_price,
+        amount: item.amount,
+      }));
+    }
+    return [{ id: "1", description: "", quantity: 1, unitPrice: 0, amount: 0 }];
+  });
 
   const addItem = () => {
     setItems([
@@ -89,7 +105,7 @@ export function AddInvoiceModal({ onClose, onSave }: AddInvoiceModalProps) {
     setSubmitting(true);
 
     try {
-      const request: CreateInvoiceRequest = {
+      const payload: CreateInvoiceRequest = {
         invoice_number: formData.invoiceNumber,
         vendor_id: formData.vendorId || undefined,
         invoice_date: formData.invoiceDate,
@@ -103,19 +119,35 @@ export function AddInvoiceModal({ onClose, onSave }: AddInvoiceModalProps) {
         currency: formData.currency,
         status: "unpaid",
         source: "manual",
+        notes: formData.notes || undefined,
+        items: items.map((item) => ({
+          description: item.description,
+          quantity: item.quantity,
+          unit_price: item.unitPrice,
+          amount: item.amount,
+        })),
       };
 
-      await invoiceApi.create(request);
+      if (isEdit && invoice) {
+        await invoiceApi.update(invoice.id, payload);
+      } else {
+        await invoiceApi.create(payload);
+      }
       onSave();
     } catch (err) {
-      console.error("Failed to create invoice:", err);
+      console.error("Failed to save invoice:", err);
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <Modal isOpen onClose={onClose} title="Add New Invoice" size="lg">
+    <Modal
+      isOpen
+      onClose={onClose}
+      title={isEdit ? "Edit Invoice" : "Add New Invoice"}
+      size="lg"
+    >
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div>
@@ -381,7 +413,13 @@ export function AddInvoiceModal({ onClose, onSave }: AddInvoiceModalProps) {
             Cancel
           </Button>
           <Button type="submit" disabled={submitting}>
-            {submitting ? "Creating..." : "Create Invoice"}
+            {submitting
+              ? isEdit
+                ? "Saving..."
+                : "Creating..."
+              : isEdit
+                ? "Save Changes"
+                : "Create Invoice"}
           </Button>
         </div>
       </form>

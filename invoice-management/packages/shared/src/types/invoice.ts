@@ -28,12 +28,25 @@ export interface Invoice {
   extracted_fields: Record<string, unknown>;
   duplicate_status: string;
   duplicate_of_invoice_id: string | null;
+  notes: string | null;
   created_at: string;
   updated_at: string;
 }
 
 export interface InvoiceWithVendor extends Invoice {
   vendor: Vendor | null;
+  items: InvoiceItem[];
+}
+
+export interface InvoiceItem {
+  id: string;
+  invoice_id: string;
+  description: string;
+  quantity: number;
+  unit_price: number;
+  amount: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreateInvoiceRequest {

@@ -3,6 +3,13 @@ import { z } from "zod";
 const INVOICE_STATUSES = ["unpaid", "paid", "overdue", "needs_review"] as const;
 const INVOICE_SOURCES = ["email", "manual", "api"] as const;
 
+const invoiceItemSchema = z.object({
+  description: z.string().default(""),
+  quantity: z.number().nonnegative(),
+  unit_price: z.number().nonnegative(),
+  amount: z.number().nonnegative(),
+});
+
 export const createInvoiceSchema = z.object({
   invoice_number: z.string().min(1, "Invoice number is required"),
   vendor_id: z.string().uuid("Invalid vendor ID").optional(),
@@ -17,6 +24,8 @@ export const createInvoiceSchema = z.object({
   igst_amount: z.number().nonnegative().optional(),
   status: z.enum(INVOICE_STATUSES).optional(),
   source: z.enum(INVOICE_SOURCES).optional(),
+  notes: z.string().optional(),
+  items: z.array(invoiceItemSchema).optional(),
 });
 
 export const updateInvoiceSchema = z.object({
@@ -34,6 +43,8 @@ export const updateInvoiceSchema = z.object({
   status: z.enum(INVOICE_STATUSES).optional(),
   paid_at: z.string().datetime().optional(),
   payment_reference: z.string().optional(),
+  notes: z.string().optional(),
+  items: z.array(invoiceItemSchema).optional(),
 });
 
 export const invoiceFiltersSchema = z.object({

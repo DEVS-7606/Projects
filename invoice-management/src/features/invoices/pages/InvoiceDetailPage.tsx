@@ -1,31 +1,39 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  FileText,
-  Calendar,
-  Building2,
-  Mail,
-  Phone,
-  MapPin,
-  Download,
-  Trash2,
-  Edit,
-  CheckCircle,
-  AlertTriangle,
-} from "lucide-react";
-import { Spinner } from "@/shared/components/atoms/Spinner";
+import { AddInvoiceModal } from "@/features/invoices/components/AddInvoiceModal";
+import { useInvoiceDetail } from "@/hooks/useInvoiceDetail";
+import { invoiceApi } from "@/services/invoice.api";
 import { Button } from "@/shared/components/atoms/Button";
 import { Card, CardContent } from "@/shared/components/atoms/Card";
 import { EmptyState } from "@/shared/components/atoms/EmptyState";
+import { Spinner } from "@/shared/components/atoms/Spinner";
 import { StatusBadge } from "@/shared/components/molecules/StatusBadge";
-import { useInvoiceDetail } from "@/hooks/useInvoiceDetail";
-import { invoiceApi } from "@/services/invoice.api";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/shared/components/ui/tooltip";
 import { formatCurrency, formatDate } from "@/utils/formatters";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  Building2,
+  Calendar,
+  CheckCircle,
+  Download,
+  Edit,
+  FileText,
+  Mail,
+  MapPin,
+  Phone,
+  Trash2,
+} from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function InvoiceDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { invoice, loading, error } = useInvoiceDetail(id);
+  const { invoice, loading, error, refetch } = useInvoiceDetail(id);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const handleDelete = async () => {
     if (!id || !confirm("Are you sure you want to delete this invoice?"))
@@ -45,7 +53,7 @@ export default function InvoiceDetailPage() {
         status: "paid",
         paid_at: new Date().toISOString(),
       });
-      window.location.reload();
+      refetch();
     } catch (err) {
       console.error("Failed to mark as paid:", err);
     }
@@ -103,10 +111,25 @@ export default function InvoiceDetailPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="secondary" icon={<Download size={16} />}>
-              Download
-            </Button>
-            <Button variant="secondary" icon={<Edit size={16} />}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span>
+                  <Button
+                    variant="secondary"
+                    icon={<Download size={16} />}
+                    disabled
+                  >
+                    Download
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>Coming soon</TooltipContent>
+            </Tooltip>
+            <Button
+              variant="secondary"
+              icon={<Edit size={16} />}
+              onClick={() => setShowEditModal(true)}
+            >
               Edit
             </Button>
             <Button
@@ -362,20 +385,36 @@ export default function InvoiceDetailPage() {
                     Mark as Paid
                   </Button>
                 )}
-                <Button
-                  variant="secondary"
-                  icon={<Mail size={16} />}
-                  className="w-full justify-center"
-                >
-                  Send Reminder
-                </Button>
-                <Button
-                  variant="secondary"
-                  icon={<FileText size={16} />}
-                  className="w-full justify-center"
-                >
-                  View PDF
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="w-full">
+                      <Button
+                        variant="secondary"
+                        icon={<Mail size={16} />}
+                        className="w-full justify-center"
+                        disabled
+                      >
+                        Send Reminder
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>Coming soon</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="w-full">
+                      <Button
+                        variant="secondary"
+                        icon={<FileText size={16} />}
+                        className="w-full justify-center"
+                        disabled
+                      >
+                        View PDF
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>Coming soon</TooltipContent>
+                </Tooltip>
               </div>
             </CardContent>
           </Card>
@@ -394,6 +433,17 @@ export default function InvoiceDetailPage() {
             )}
         </div>
       </div>
+
+      {showEditModal && invoice && (
+        <AddInvoiceModal
+          invoice={invoice}
+          onClose={() => setShowEditModal(false)}
+          onSave={() => {
+            setShowEditModal(false);
+            refetch();
+          }}
+        />
+      )}
     </div>
   );
 }

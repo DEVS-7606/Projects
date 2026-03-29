@@ -49,7 +49,7 @@ export class InvoiceRepository {
   async findById(invoiceId: string, userId: string) {
     const { data, error } = await supabase
       .from("invoices")
-      .select("*, vendor:vendors(*)")
+      .select("*, vendor:vendors(*), items:invoice_items(*)")
       .eq("id", invoiceId)
       .eq("user_id", userId)
       .single();
@@ -60,15 +60,35 @@ export class InvoiceRepository {
   }
 
   async create(invoiceData: Record<string, unknown>) {
+    const { items, ...invoiceFields } = invoiceData as Record<
+      string,
+      unknown
+    > & {
+      items?: Array<{
+        description: string;
+        quantity: number;
+        unit_price: number;
+        amount: number;
+      }>;
+    };
+
     const { data, error } = await supabase
       .from("invoices")
-      .insert(invoiceData)
+      .insert(invoiceFields)
       .select("*, vendor:vendors(*)")
       .single();
 
     if (error) throw new Error(error.message);
 
-    return data;
+    if (items && items.length > 0) {
+      const { error: itemsError } = await supabase
+        .from("invoice_items")
+        .insert(items.map((item) => ({ ...item, invoice_id: data.id })));
+      if (itemsError) throw new Error(itemsError.message);
+    }
+
+    // re-fetch with items included
+    return this.findById(data.id, invoiceFields.user_id as string);
   }
 
   async update(
@@ -76,17 +96,35 @@ export class InvoiceRepository {
     userId: string,
     updates: Record<string, unknown>,
   ) {
-    const { data, error } = await supabase
+    const { items, ...invoiceFields } = updates as Record<string, unknown> & {
+      items?: Array<{
+        description: string;
+        quantity: number;
+        unit_price: number;
+        amount: number;
+      }>;
+    };
+
+    const { error } = await supabase
       .from("invoices")
-      .update({ ...updates, updated_at: new Date().toISOString() })
+      .update({ ...invoiceFields, updated_at: new Date().toISOString() })
       .eq("id", invoiceId)
-      .eq("user_id", userId)
-      .select("*, vendor:vendors(*)")
-      .single();
+      .eq("user_id", userId);
 
     if (error) throw new Error(error.message);
 
-    return data;
+    if (items) {
+      // replace all items
+      await supabase.from("invoice_items").delete().eq("invoice_id", invoiceId);
+      if (items.length > 0) {
+        const { error: itemsError } = await supabase
+          .from("invoice_items")
+          .insert(items.map((item) => ({ ...item, invoice_id: invoiceId })));
+        if (itemsError) throw new Error(itemsError.message);
+      }
+    }
+
+    return this.findById(invoiceId, userId);
   }
 
   async delete(invoiceId: string, userId: string) {
