@@ -67,11 +67,25 @@ Unique constraint: (user_id, lower(name))
 | created_at              | timestamptz   |                                                |
 | updated_at              | timestamptz   |                                                |
 
+### Invoice Item
+
+| Field       | Type        | Notes                             |
+| ----------- | ----------- | --------------------------------- |
+| id          | uuid        | Auto-generated                    |
+| invoice_id  | uuid        | FK → invoices(id), cascade delete |
+| description | text        | Default ''                        |
+| quantity    | numeric     | Default 1                         |
+| unit_price  | numeric     | Default 0                         |
+| amount      | numeric     | Default 0                         |
+| created_at  | timestamptz |                                   |
+| updated_at  | timestamptz |                                   |
+
 ## Relationships
 
 - One user → many vendors
 - One user → many invoices
 - One vendor → many invoices
+- One invoice → many invoice items
 - One invoice may reference another as duplicate
 
 ## RLS
