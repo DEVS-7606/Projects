@@ -1,4 +1,4 @@
-# Architecture — Invoice Management MVP
+# Architecture — Dealers Invoice MVP
 
 ## Stack
 

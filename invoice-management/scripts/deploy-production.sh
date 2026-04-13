@@ -2,7 +2,7 @@
 
 set -e
 
-echo "🚀 Invoice Management System - Production Deployment Script"
+echo "🚀 Dealers Invoice - Production Deployment Script"
 echo "============================================================"
 echo ""
 

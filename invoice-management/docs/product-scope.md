@@ -1,4 +1,4 @@
-# Product Scope — Invoice Management MVP
+# Product Scope — Dealers Invoice MVP
 
 ## What This Is
 

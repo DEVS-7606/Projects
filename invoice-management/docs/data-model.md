@@ -1,4 +1,4 @@
-# Data Model — Invoice Management MVP
+# Data Model — Dealers Invoice MVP
 
 ## Entities
 

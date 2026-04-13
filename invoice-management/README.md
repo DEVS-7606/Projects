@@ -1,4 +1,4 @@
-# Invoice Management System
+# Dealers Invoice
 
 A focused invoice workflow tool for micro-SMEs. Track unpaid/overdue invoices, manage vendors, and automate invoice data extraction.
 

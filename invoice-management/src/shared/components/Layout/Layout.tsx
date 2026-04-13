@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   FileText,
@@ -11,14 +11,14 @@ import {
   Menu,
   X,
   Zap,
-} from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+} from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
-  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/invoices', icon: FileText, label: 'Invoices' },
-  { to: '/vendors', icon: Building2, label: 'Vendors' },
-  { to: '/settings', icon: Settings, label: 'Settings' },
+  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/invoices", icon: FileText, label: "Invoices" },
+  { to: "/vendors", icon: Building2, label: "Vendors" },
+  { to: "/settings", icon: Settings, label: "Settings" },
 ];
 
 export function Layout() {
@@ -30,15 +30,15 @@ export function Layout() {
   const handleLogout = async () => {
     try {
       await signOut();
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
-  const userInitial = user?.email?.charAt(0).toUpperCase() || 'U';
-  const userName = user?.username || user?.email?.split('@')[0] || 'User';
-  const userEmail = user?.email || 'user@example.com';
+  const userInitial = user?.email?.charAt(0).toUpperCase() || "U";
+  const userName = user?.username || user?.email?.split("@")[0] || "User";
+  const userEmail = user?.email || "user@example.com";
 
   return (
     <div className="flex h-screen bg-[#f9fafb] overflow-hidden">
@@ -53,7 +53,7 @@ export function Layout() {
       {/* Sidebar */}
       <aside
         className={`fixed lg:static inset-y-0 left-0 z-30 w-60 flex flex-col bg-[#1f2937] transition-transform duration-300 ${
-          mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
         {/* Logo */}
@@ -61,7 +61,9 @@ export function Layout() {
           <div className="w-8 h-8 bg-[#3b82f6] rounded-lg flex items-center justify-center">
             <Zap size={16} className="text-white" />
           </div>
-          <span className="text-white font-semibold text-lg tracking-tight">Invoice Manager</span>
+          <span className="text-white font-semibold text-lg tracking-tight">
+            Dealers Invoice
+          </span>
         </div>
 
         {/* Navigation */}
@@ -74,8 +76,8 @@ export function Layout() {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
                   isActive
-                    ? 'bg-[#3b82f6]/20 text-white border-l-2 border-[#3b82f6]'
-                    : 'text-gray-400 hover:bg-white/10 hover:text-white'
+                    ? "bg-[#3b82f6]/20 text-white border-l-2 border-[#3b82f6]"
+                    : "text-gray-400 hover:bg-white/10 hover:text-white"
                 }`
               }
             >
@@ -97,17 +99,22 @@ export function Layout() {
               </div>
               <div className="flex-1 text-left min-w-0">
                 <div className="text-sm text-white truncate">{userName}</div>
-                <div className="text-xs text-gray-500 truncate">{userEmail}</div>
+                <div className="text-xs text-gray-500 truncate">
+                  {userEmail}
+                </div>
               </div>
-              <ChevronDown size={14} className={`flex-shrink-0 transition-transform ${profileOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                size={14}
+                className={`flex-shrink-0 transition-transform ${profileOpen ? "rotate-180" : ""}`}
+              />
             </button>
 
             {profileOpen && (
               <div className="absolute bottom-full left-0 right-0 mb-1 bg-[#374151] rounded-lg border border-white/10 overflow-hidden shadow-lg">
-                <button 
+                <button
                   onClick={() => {
                     setProfileOpen(false);
-                    navigate('/settings');
+                    navigate("/settings");
                   }}
                   className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:bg-white/10 transition-colors"
                 >
@@ -140,7 +147,8 @@ export function Layout() {
 
           <div className="hidden lg:block">
             <p className="text-sm text-gray-500">
-              Welcome back, <span className="text-gray-900 font-medium">{userName}</span>
+              Welcome back,{" "}
+              <span className="text-gray-900 font-medium">{userName}</span>
             </p>
           </div>
 
@@ -149,7 +157,9 @@ export function Layout() {
               <div className="w-8 h-8 bg-[#3b82f6] rounded-full flex items-center justify-center text-white text-sm font-medium">
                 {userInitial}
               </div>
-              <span className="text-sm text-gray-700 hidden sm:block">{userName}</span>
+              <span className="text-sm text-gray-700 hidden sm:block">
+                {userName}
+              </span>
             </div>
           </div>
         </header>
