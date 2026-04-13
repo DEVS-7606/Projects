@@ -94,7 +94,7 @@ export function Layout() {
               onClick={() => setProfileOpen(!profileOpen)}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
             >
-              <div className="w-8 h-8 bg-[#3b82f6] rounded-full flex items-center justify-center text-white text-sm font-medium flex-shrink-0">
+              <div className="w-8 h-8 bg-[#3b82f6] rounded-full flex items-center justify-center text-white text-sm font-medium shrink-0">
                 {userInitial}
               </div>
               <div className="flex-1 text-left min-w-0">
@@ -105,7 +105,7 @@ export function Layout() {
               </div>
               <ChevronDown
                 size={14}
-                className={`flex-shrink-0 transition-transform ${profileOpen ? "rotate-180" : ""}`}
+                className={`shrink-0 transition-transform ${profileOpen ? "rotate-180" : ""}`}
               />
             </button>
 
@@ -137,7 +137,7 @@ export function Layout() {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
-        <header className="h-16 bg-white border-b border-[#e5e7eb] flex items-center justify-between px-6 flex-shrink-0">
+        <header className="h-16 bg-white border-b border-[#e5e7eb] flex items-center justify-between px-6 shrink-0">
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden p-1.5 rounded-lg text-gray-500 hover:bg-gray-100"

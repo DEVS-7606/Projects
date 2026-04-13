@@ -29,7 +29,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f9fafb] to-[#eff6ff] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-[#f9fafb] to-[#eff6ff] flex items-center justify-center p-4">
       <div
         className="w-full max-w-4xl flex bg-white rounded-2xl shadow-xl overflow-hidden"
         style={{ minHeight: "560px" }}
@@ -65,7 +65,7 @@ export default function LoginPage() {
                 "Get overdue alerts automatically",
               ].map((feat, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <div className="w-5 h-5 bg-[#3b82f6]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-5 h-5 bg-[#3b82f6]/20 rounded-full flex items-center justify-center shrink-0">
                     <div className="w-2 h-2 bg-[#3b82f6] rounded-full" />
                   </div>
                   <span className="text-gray-300 text-sm">{feat}</span>

@@ -46,7 +46,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f9fafb] to-[#eff6ff] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br from-[#f9fafb] to-[#eff6ff] flex items-center justify-center p-4">
       <div
         className="w-full max-w-4xl flex bg-white rounded-2xl shadow-xl overflow-hidden"
         style={{ minHeight: "580px" }}
