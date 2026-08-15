@@ -1,0 +1,58 @@
+# Vercel Web Analytics Implementation
+
+## Overview
+Successfully installed and configured Vercel Web Analytics for the invoice-management project using the latest official documentation.
+
+## Changes Made
+
+### 1. Package Installation
+- Installed `@vercel/analytics` package (version resolved via npm)
+- Used npm as the project's package manager
+- Package added to dependencies in package.json
+
+### 2. Analytics Integration
+**Modified: `src/App.tsx`**
+- Added import for Analytics component: `import { Analytics } from '@vercel/analytics/react';`
+- Integrated the Analytics component into the main App component
+- Placed Analytics component alongside RouterProvider using a React Fragment
+- Follows Vite/React framework-specific instructions from Vercel documentation
+
+## Implementation Details
+
+The Analytics component was added to the root App component, which is the appropriate location for a Vite + React application. This ensures analytics tracking is initialized for all pages/routes handled by the React Router.
+
+The implementation follows the official Vercel Analytics quickstart guide (https://vercel.com/docs/analytics/quickstart) for React/Vite projects.
+
+## Code Structure
+```jsx
+<>
+  <RouterProvider router={router} />
+  <Analytics />
+</>
+```
+
+This structure ensures:
+- Analytics is loaded on application mount
+- All route navigations are tracked
+- Minimal impact on existing code structure
+
+## Verification Performed
+- ✅ TypeScript type checking passed (`npm run typecheck`)
+- ✅ Production build completed successfully (`npm run build`)
+- ✅ No new lint errors introduced by the changes
+- ✅ Existing lint errors are pre-existing and unrelated to this implementation
+
+## Next Steps
+To enable analytics data collection:
+1. Enable Web Analytics in the Vercel dashboard (Analytics section)
+2. Deploy the application to Vercel
+3. Verify analytics are working by checking the Network tab for requests to `/<unique-path>/view`
+
+## Files Modified
+- `package.json` - Added @vercel/analytics dependency
+- `src/App.tsx` - Added Analytics component
+
+## Notes
+- The project's .gitignore intentionally excludes package-lock.json, so it was not staged
+- Build artifacts (dist/) were not staged per standard practices
+- All changes preserve existing code structure and functionality
